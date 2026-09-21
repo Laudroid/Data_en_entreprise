@@ -19,18 +19,6 @@ Ce module pose les fondations. Le module 3, juste après le déjeuner, les met e
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 10 min | 1. Le problème : pourquoi pas un seul grand tableau |
-| 10 min | 2. La réponse relationnelle : tables et clés |
-| 10 min | 3. Le schéma de notre base |
-| 7 min | 4. La jointure |
-| 3 min | 5. ACID et les principaux systèmes |
-
----
-
 ## 1. Le problème : pourquoi pas un seul grand tableau ?
 
 Posons le problème avec notre jeu e-commerce. Nous voulons enregistrer des commandes. Chaque commande a un client, contient un ou plusieurs articles, chaque article vient d'un vendeur et appartient à une catégorie.
@@ -102,33 +90,72 @@ Cette garantie n'est pas un détail technique. C'est ce qui fait qu'une base rel
 Voici la base que vous allez interroger cet après-midi. Huit tables, restreintes aux 3 000 commandes de notre échantillon.
 
 ```
-customers (3 000)                    orders (3 000)
-  customer_id        PK  <-------FK--  customer_id
-  customer_unique_id                   order_id                      PK  --+
-  customer_city                        order_status                        |
-  customer_state                       order_purchase_timestamp            |
-                                       order_delivered_customer_date       |
-                                       order_estimated_delivery_date       |
-                                                                           |
-order_items (3 418)                                                        |
-  order_id       PK, FK  <--------------------------------------------------+
-  order_item_id  PK                     products (2 488)                   |
-  product_id     FK  ----------------->   product_id             PK        |
-  seller_id      FK  ---------+           product_category_name  FK --+    |
-  price                       |           product_weight_g            |    |
-  freight_value               |           product_photos_qty          |    |
-                              |                                       |    |
-sellers (975)                 |     product_category_name_translation (64) |
-  seller_id      PK  <--------+       product_category_name         PK <---+
-  seller_city                         product_category_name_english        |
-  seller_state                                                             |
-                                    order_payments (3 115)                 |
-order_reviews (3 021)                 order_id            FK  <------------+
-  review_id                           payment_sequential  PK               |
-  order_id       FK  <-----------------------------------------------------+
-  review_score                        payment_type
-  review_creation_date                payment_installments
-                                      payment_value
+erDiagram
+    CUSTOMERS ||--o{ ORDERS : "place (1:N)"
+    ORDERS ||--o{ ORDER_ITEMS : "contains (1:N)"
+    ORDERS ||--o{ ORDER_PAYMENTS : "paid_by (1:N)"
+    ORDERS ||--o{ ORDER_REVIEWS : "reviewed_by (1:N)"
+    PRODUCTS ||--o{ ORDER_ITEMS : "included_in (1:N)"
+    SELLERS ||--o{ ORDER_ITEMS : "fulfilled_by (1:N)"
+    PRODUCT_CATEGORY_TRANSLATION ||--o{ PRODUCTS : "translates (1:N)"
+
+    CUSTOMERS {
+        string customer_id PK "UUID du client par commande"
+        string customer_unique_id "UUID unique du client physique"
+        string customer_city "Ville de résidence"
+        string customer_state "État (ex: SP, RJ)"
+    }
+
+    ORDERS {
+        string order_id PK "UUID unique de la commande"
+        string customer_id FK "Clé étrangère vers CUSTOMERS"
+        string order_status "Statut (delivered, shipped, etc.)"
+        datetime order_purchase_timestamp "Date de validation d'achat"
+        datetime order_delivered_customer_date "Date réelle de livraison"
+        datetime order_estimated_delivery_date "Date estimée de livraison"
+    }
+
+    ORDER_ITEMS {
+        string order_id PK, FK "Réf commande"
+        int order_item_id PK "N° séquentiel de l'article"
+        string product_id FK "Réf produit"
+        string seller_id FK "Réf vendeur"
+        decimal price "Prix unitaire"
+        decimal freight_value "Frais de port"
+    }
+
+    PRODUCTS {
+        string product_id PK "UUID du produit"
+        string product_category_name FK "Nom de la catégorie (PT)"
+        int product_weight_g "Poids en grammes"
+        int product_photos_qty "Nombre d'images produits"
+    }
+
+    SELLERS {
+        string seller_id PK "UUID du vendeur"
+        string seller_city "Ville du vendeur"
+        string seller_state "État du vendeur"
+    }
+
+    PRODUCT_CATEGORY_TRANSLATION {
+        string product_category_name PK "Nom de catégorie original (PT)"
+        string product_category_name_english "Traduction en anglais"
+    }
+
+    ORDER_REVIEWS {
+        string review_id PK "UUID de l'évaluation"
+        string order_id FK "Commande évaluée"
+        int review_score "Note de 1 à 5"
+        datetime review_creation_date "Date de rédaction"
+    }
+
+    ORDER_PAYMENTS {
+        string order_id PK, FK "Réf commande"
+        int payment_sequential PK "N° d'échéance / paiement"
+        string payment_type "Type (credit_card, voucher, etc.)"
+        int payment_installments "Nombre de mensualités"
+        decimal payment_value "Montant payé"
+    }
 ```
 
 ### Trois observations à faire remarquer

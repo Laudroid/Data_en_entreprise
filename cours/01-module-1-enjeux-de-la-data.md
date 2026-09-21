@@ -19,20 +19,6 @@
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 12 min | 1. Qu'est-ce qu'une donnée ? |
-| 16 min | 2. Le cycle de vie de la donnée |
-| 12 min | 3. Qualité et gouvernance |
-| 16 min | 4. Le rôle stratégique dans la décision |
-| 14 min | 5. Panorama des métiers |
-| 16 min | 6. Cas d'usage sectoriels |
-| 4 min | 7. Culture data — synthèse |
-
----
-
 ## 1. Qu'est-ce qu'une donnée ?
 
 ### 1.1 Une définition utilisable
@@ -393,17 +379,3 @@ Ces quatre questions ne demandent aucune compétence technique. Elles suffisent 
 **Corrélation** : tendance de deux grandeurs à varier ensemble. N'implique pas la causalité.
 **Biais du survivant** : erreur consistant à conclure à partir des seuls cas présents dans les données.
 **Data-driven** : qualifie une organisation dont les décisions sont arbitrées par les données.
-
----
-
-## Notes pour le formateur
-
-**Ouverture recommandée (sur les 20 minutes d'accueil).** Deux questions à main levée : « qui pense que sa future entreprise prend ses décisions à partir de données ? » puis « qui a déjà vu quelqu'un présenter un graphique pour gagner un argument ? ». L'écart entre les deux réponses installe tout le module.
-
-**Le format 90 minutes est long pour un public sans prérequis.** Prévoyez deux respirations : une question à la salle à la fin de la section 2 (« à votre avis, à quelle étape perd-on le plus de valeur ? »), et le tableau de la journée type en section 5.3, qui réveille toujours la salle parce que la proportion surprend.
-
-**Point de vigilance sur la section 4.** La tentation est de survendre la data. Résistez-y. Ce public est déjà largement exposé à un discours enthousiaste sur l'intelligence artificielle. L'apport différenciant de ce cours est la lucidité méthodologique, pas l'enthousiasme.
-
-**La section 6 est modulable.** Si vous êtes en retard, traitez trois secteurs sur cinq en profondeur et distribuez le reste à lire. Ne traitez jamais les cinq en survol : mieux vaut comprendre trois mécanismes complets que collectionner cinq exemples.
-
-**Transition vers l'atelier 1.** « On vient de dire que la donnée rend la décision discutable. On va le vérifier : je vous donne trois décisions d'entreprise argumentées avec des chiffres, et vous allez les attaquer. Sans ordinateur, et sans les données. »
