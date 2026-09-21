@@ -249,16 +249,4 @@ Tous parlent SQL, avec des dialectes légèrement différents. Ce que vous appre
 **ACID** : atomicité, cohérence, isolation, durabilité.
 **SGBD** : système de gestion de base de données (PostgreSQL, MySQL, SQLite...).
 
----
 
-## Notes pour le formateur
-
-**Faites trouver les trois défauts par la salle.** C'est la séquence la plus rentable du module. La redondance vient en trente secondes, l'incohérence avec un indice (« et si le client déménage ? »), le troisième presque jamais (« et un vendeur qui n'a encore rien vendu ? »). Cette découverte justifie le modèle relationnel au lieu de l'imposer, et la différence d'adhésion est nette.
-
-**Projetez le schéma et posez trois questions de localisation** avant de passer à la jointure : où est l'état du client, où est l'état du vendeur, où est le prix. Trois tables, trois réponses. Cela prépare directement les requêtes de l'après-midi et fait manipuler le schéma au lieu de le regarder.
-
-**Ne développez pas ACID.** Trois minutes, l'atomicité illustrée par le virement, et vous passez. Le détail des trois autres lettres n'apporte rien à ce niveau et coûte cher en attention.
-
-**Le piège des effectifs (section 3) est le plus utile de tout le module 2.** 3 418 articles pour 3 000 commandes : écrivez les deux nombres au tableau et laissez-les visibles pendant l'atelier SQL. La moitié des erreurs de l'après-midi viendront de là, et un étudiant qui aperçoit les deux nombres au tableau se corrige tout seul.
-
-**Transition vers le déjeuner et le module 3.** « Vous savez lire le schéma. Après le déjeuner, vous apprenez à l'interroger — et vous écrirez vos propres requêtes sur cette base. »

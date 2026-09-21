@@ -20,19 +20,6 @@
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 5 min | 0. L'outil |
-| 10 min | 1. La forme d'une requête |
-| 12 min | 2. Agréger : les cinq fonctions et `GROUP BY` |
-| 15 min | 3. Joindre |
-| 8 min | 4. `WHERE` contre `HAVING`, `JOIN` contre `LEFT JOIN` |
-| 10 min | 5. Les trois erreurs classiques, et comment se vérifier |
-
----
-
 ## 0. L'outil
 
 Nous utilisons **sqliteonline.com**, un éditeur SQL qui fonctionne dans le navigateur, sans installation et sans compte.
@@ -502,20 +489,3 @@ Retenez la leçon plus que le chiffre : **un écart entre deux chiffres n'est pa
 **Produit cartésien** : résultat d'une jointure sans condition, qui multiplie les effectifs des deux tables.
 **`CASE WHEN`** : expression conditionnelle, équivalent du `SI` d'un tableur.
 
----
-
-## Notes pour le formateur
-
-**Faites écrire, ne faites pas regarder.** C'est un module de 60 minutes et la tentation est de projeter dix requêtes. Après chaque section, laissez deux minutes pour que la salle tape et exécute la requête que vous venez de montrer. Dix minutes de frappe effective valent mieux que vingt requêtes projetées.
-
-**Vérifiez le chargement de la base dès la première minute.** Ne commencez pas la section 1 avant que chacun ait les huit tables affichées dans son arborescence. Un étudiant qui n'a pas chargé la base au bout de dix minutes sera perdu pour toute la séance. Faites lever la main.
-
-**La séquence la plus rentable est la section 5.1**, la multiplication des lignes. Écrivez les deux nombres au tableau — 3 000 commandes, 3 418 lignes après jointure — et laissez-les visibles pendant tout l'atelier qui suit. La moitié des erreurs de l'atelier viendront de là, et un étudiant qui voit les deux nombres se corrige seul.
-
-**Le `LEFT JOIN` (section 4.2) mérite qu'on fasse exécuter les deux requêtes côte à côte.** Voir 2 452 d'un côté et 2 488 de l'autre marque bien plus qu'une explication. Faites-leur constater l'écart, puis demandez : « où sont passés les 36 ? »
-
-**Si vous êtes en retard**, coupez la section 4.2 (`LEFT JOIN`) et gardez impérativement la section 5 et la section 6. Le `LEFT JOIN` peut se rattraper à l'atelier, sur une question précise ; les erreurs classiques, non.
-
-**Anticipez la question « pourquoi apprendre SQL si l'IA écrit les requêtes ? »**. Réponse honnête et courte : une IA écrit une requête syntaxiquement correcte sans savoir que `order_items` contient 3 418 lignes pour 3 000 commandes, ni que 20 commandes ont deux avis. Elle produira un chiffre plausible et faux. Savoir lire la requête et vérifier l'ordre de grandeur est justement la compétence qui reste nécessaire — et c'est celle que l'atelier évalue.
-
-**Transition vers l'atelier 2.** « Vous avez vu six requêtes. Vous allez maintenant en écrire douze, seul, sur cette base. Les trois dernières sont difficiles : c'est voulu. »

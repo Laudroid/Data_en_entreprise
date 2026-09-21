@@ -17,18 +17,6 @@
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 5 min | 1. À quoi sert un diagramme |
-| 8 min | 2. Le vocabulaire |
-| 14 min | 3. Les cardinalités |
-| 10 min | 4. Normaliser, dénormaliser |
-| 8 min | 5. DBML et dbdiagram.io |
-
----
-
 ## 1. À quoi sert un diagramme
 
 Un **diagramme entité-association** — ou **ERD**, pour Entity-Relationship Diagram — est le plan du bâtiment. Il montre les tables, leurs colonnes, et les liens entre elles.
@@ -79,7 +67,7 @@ Quatre noms répétés, quatre entités. Trois verbes, trois associations. La m�
 
 **La clé étrangère se place toujours du côté « plusieurs ».**
 
-C'est la règle la plus utile des deux journées. La table `orders` porte `customer_id` parce qu'une commande n'a qu'un client, alors qu'un client peut avoir plusieurs commandes.
+La table `orders` porte `customer_id` parce qu'une commande n'a qu'un client, alors qu'un client peut avoir plusieurs commandes.
 
 L'inverse serait impossible : il faudrait mettre plusieurs valeurs dans une même case de la table `customers`. Or une case contient une valeur, et une seule.
 
@@ -180,7 +168,7 @@ Cette phrase est la charnière entre le jour 1 et le jour 2. Demain matin, quand
 
 L'outil est accessible sans compte pour dessiner. L'enregistrement, lui, demande une connexion : vous livrerez donc votre travail sous forme d'export image ou de code DBML copié dans un fichier.
 
-### 5.2 La syntaxe, en tout et pour tout
+### 5.2 La syntaxe
 
 ```
 Table customers {
@@ -262,19 +250,3 @@ Cette progression évite l'erreur la plus fréquente, qui consiste à se lancer 
 **Formes normales** : les trois premières règles de normalisation.
 **Dénormalisation** : réintroduction volontaire de redondance pour accélérer la lecture.
 **DBML** : langage textuel de description de schéma utilisé par dbdiagram.io.
-
----
-
-## Notes pour le formateur
-
-**La cardinalité est le seul point réellement difficile.** Consacrez-lui les 14 minutes prévues sans les rogner. Si la salle décroche, revenez systématiquement à la question de vérification : « peut-on mettre plusieurs valeurs dans une seule case ? »
-
-**Faites le lien avec ce qu'ils viennent de faire.** Ils ont passé l'après-midi à écrire des jointures sur `order_items`. Montrez-leur que cette table qu'ils ont manipulée est précisément la table intermédiaire du N — N. Le concept devient concret parce qu'ils l'ont déjà utilisé sans le savoir.
-
-**La section 3.4 sur le prix est le coeur de l'évaluation de l'atelier 3.** Le barème y met 3 points sur 20. Traitez-la avec l'exemple concret : « le vendeur change son tarif en mars. Que deviennent les commandes de février ? »
-
-**Ne détaillez pas les formes normales.** Les trois règles en langage courant suffisent, et les noms savants font fuir. Si un étudiant connaît déjà le vocabulaire, confirmez la correspondance en une phrase et continuez.
-
-**Si vous êtes en retard**, comprimez la section 1 à deux phrases et la section 3.5 (le cas 1 — 1) à une. Ne touchez pas aux sections 3.2, 3.3 et 3.4.
-
-**Transition vers l'atelier 3.** « Trente minutes, un cahier des charges d'une dizaine de lignes, et un schéma à produire. Il contient au moins une relation plusieurs-à-plusieurs, et un piège sur le prix. Vous êtes prévenus. »
