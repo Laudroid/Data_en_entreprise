@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Culture data — deux journées de 7 heures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d1b2a;
+  --paper:#ffffff;
+  --rule:#d8dee6;
+  --accent:#0b5fff;
+  --accent-soft:#eaf0ff;
+  --warn:#b3261e;
+  --warn-soft:#fdeceb;
+  --muted:#5b6775;
+  --grid:#f2f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0d1b2a;overflow:hidden;font-family:'IBM Plex Sans',system-ui,sans-serif}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1280px;height:720px;position:relative;transform-origin:center center;background:var(--paper);overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:64px 72px;background:var(--paper);color:var(--ink)}
+.slide.active{display:flex}
+
+/* chrome */
+.kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:18px}
+h1{font-size:62px;line-height:1.04;font-weight:600;letter-spacing:-.02em}
+h2{font-size:40px;line-height:1.12;font-weight:600;letter-spacing:-.015em;margin-bottom:26px}
+h3{font-size:23px;font-weight:600;margin-bottom:10px}
+p{font-size:21px;line-height:1.5;color:var(--ink)}
+.lead{font-size:25px;line-height:1.45;color:var(--muted);max-width:60ch}
+.sub{font-size:18px;color:var(--muted);margin-top:20px}
+ul{list-style:none;margin-top:6px}
+li{font-size:21px;line-height:1.45;padding-left:26px;position:relative;margin-bottom:14px;max-width:62ch}
+li::before{content:"";position:absolute;left:0;top:12px;width:9px;height:9px;background:var(--accent);border-radius:50%}
+strong{font-weight:600}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* title slide */
+.title-slide{justify-content:center;background:var(--ink);color:#fff}
+.title-slide h1{color:#fff;max-width:22ch}
+.title-slide .kicker{color:#7fa8ff}
+.title-slide .meta{margin-top:38px;font-size:19px;color:#9fb0c4;line-height:1.7}
+.title-slide .meta span{color:#fff;font-weight:500}
+
+/* section divider */
+.divider{justify-content:center;background:var(--accent);color:#fff}
+.divider h1{color:#fff;font-size:66px}
+.divider .kicker{color:#c7d8ff}
+.divider .meta{margin-top:28px;font-size:20px;color:#dbe6ff}
+
+/* layout helpers */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center}
+.card{background:var(--grid);border-left:3px solid var(--accent);padding:22px 24px}
+.card h3{font-size:19px;color:var(--accent)}
+.card p{font-size:17px;line-height:1.42;color:var(--muted)}
+
+/* big number */
+.figures{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:8px}
+.fig{border-top:2px solid var(--ink);padding-top:16px}
+.fig .n{font-size:58px;font-weight:600;letter-spacing:-.03em;line-height:1;font-family:'IBM Plex Mono',monospace}
+.fig .l{font-size:16px;color:var(--muted);margin-top:10px;line-height:1.35}
+.fig.hot{border-top-color:var(--warn)}
+.fig.hot .n{color:var(--warn)}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{text-align:left;padding:11px 14px;font-size:18px;border-bottom:1px solid var(--rule)}
+th{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:2px solid var(--ink)}
+td.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+tr.hl td{background:var(--accent-soft);font-weight:500}
+
+/* histogram */
+.hist{margin-top:10px}
+.hrow{display:grid;grid-template-columns:110px 1fr 96px;align-items:center;gap:14px;margin-bottom:9px}
+.hrow .lab{font-size:16px;font-family:'IBM Plex Mono',monospace;color:var(--muted);text-align:right}
+.hbar{height:22px;background:var(--accent);border-radius:2px}
+.hrow .val{font-size:15px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.hrow.tail .hbar{background:var(--warn)}
+
+/* callout */
+.callout{background:var(--warn-soft);border-left:4px solid var(--warn);padding:24px 28px;margin-top:26px}
+.callout p{font-size:24px;line-height:1.4;font-weight:500;color:var(--warn)}
+.quiet{background:var(--accent-soft);border-left-color:var(--accent)}
+.quiet p{color:var(--accent)}
+
+/* code */
+pre{background:var(--ink);color:#e6edf6;padding:22px 26px;font-family:'IBM Plex Mono',monospace;font-size:17px;line-height:1.6;overflow:hidden;margin-top:6px}
+pre .kw{color:#7fa8ff}
+pre .cm{color:#8fa3b8}
+
+/* schema ascii */
+.schema{font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.55;background:var(--grid);padding:20px 24px;white-space:pre;color:var(--ink)}
+
+/* agenda */
+.agenda{display:grid;grid-template-columns:130px 1fr;gap:0 22px;margin-top:4px}
+.agenda .t{font-family:'IBM Plex Mono',monospace;font-size:17px;color:var(--accent);padding:9px 0;border-top:1px solid var(--rule)}
+.agenda .d{font-size:19px;padding:9px 0;border-top:1px solid var(--rule)}
+.agenda .t.br,.agenda .d.br{color:var(--muted);font-size:16px}
+
+/* footer nav */
+#bar{position:absolute;bottom:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 72px;font-size:13px;color:var(--muted)}
+.title-slide #bar,.divider #bar{color:rgba(255,255,255,.7)}
+#dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:20}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--rule);cursor:pointer;transition:background .2s}
+.dot.on{background:var(--accent);width:18px;border-radius:3px}
+#counter{position:absolute;bottom:14px;right:24px;font-size:13px;color:var(--muted);font-family:'IBM Plex Mono',monospace;z-index:20}
+#nav{position:absolute;bottom:10px;left:24px;display:flex;gap:8px;z-index:20}
+#nav button{width:30px;height:30px;border:1px solid var(--rule);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer;font-size:15px;line-height:1}
+#nav button:hover{border-color:var(--accent);color:var(--accent)}
+.src{font-size:14px;color:var(--muted);margin-top:18px;font-style:italic}
+/* densite resserree pour les slides a forte charge de texte */
+.slide.tight li{font-size:19px;line-height:1.38;margin-bottom:10px;max-width:66ch}
+.slide.tight h2{margin-bottom:20px}
+.slide.tight .callout{margin-top:18px;padding:18px 24px}
+.slide.tight .callout p{font-size:21px}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1 -->
+<section class="slide title-slide active">
+  <div class="kicker">Formation — deux journées</div>
+  <h1>Culture data</h1>
+  <div class="meta">
+    Comprendre les enjeux · Découvrir les architectures · Maîtriser les statistiques descriptives<br>
+    <span>Bachelor 2</span> — aucun prérequis · <span>2 × 7 heures</span><br>
+    Outils : SQLite en ligne · dbdiagram.io · Looker Studio · tableur
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="kicker">Déroulé</div>
+  <h2>Deux journées, deux mouvements</h2>
+  <div class="two">
+    <div>
+      <h3 style="color:var(--accent)">Jour 1 — De la donnée au schéma</h3>
+      <div class="agenda" style="grid-template-columns:96px 1fr">
+        <div class="t">9 h 20</div><div class="d">Enjeux de la data</div>
+        <div class="t">11 h 05</div><div class="d">Atelier — attaquer une décision</div>
+        <div class="t">11 h 50</div><div class="d">Le modèle relationnel</div>
+        <div class="t">13 h 30</div><div class="d">SQL : lire et écrire</div>
+        <div class="t">14 h 30</div><div class="d">Atelier — écrire des requêtes</div>
+        <div class="t">15 h 45</div><div class="d">Modélisation et ERD</div>
+        <div class="t">16 h 30</div><div class="d">Atelier — modéliser un schéma</div>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:var(--accent)">Jour 2 — De la donnée à la décision</h3>
+      <div class="agenda" style="grid-template-columns:96px 1fr">
+        <div class="t">9 h 10</div><div class="d">NoSQL, OLTP et OLAP</div>
+        <div class="t">10 h 10</div><div class="d">Atelier — arbitrer SQL / NoSQL</div>
+        <div class="t">10 h 55</div><div class="d">Statistiques : position, dispersion</div>
+        <div class="t">13 h 30</div><div class="d">Atelier — fiche d'identité</div>
+        <div class="t">14 h 30</div><div class="d">Distribution, valeurs aberrantes</div>
+        <div class="t">15 h 35</div><div class="d">Atelier — tableau de bord</div>
+        <div class="t">16 h 25</div><div class="d">Restitution orale et quiz</div>
+      </div>
+    </div>
+  </div>
+  <div class="sub">13 heures de temps pédagogique net · 7 modules · 6 ateliers</div>
+</section>
+
+<!-- 3 -->
+<section class="slide tight">
+  <div class="kicker">Cadrage</div>
+  <h2>Ce que ces deux jours font, et ne font pas</h2>
+  <div class="two">
+    <div>
+      <h3 style="color:var(--accent)">Vous saurez</h3>
+      <ul>
+        <li>Poser les bonnes questions devant un chiffre</li>
+        <li><strong>Écrire</strong> des requêtes SQL sur une vraie base</li>
+        <li>Concevoir un schéma de données</li>
+        <li>Calculer et <strong>interpréter</strong> les statistiques descriptives</li>
+        <li>Construire un tableau de bord et le <strong>défendre à l'oral</strong></li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--warn)">Hors périmètre</h3>
+      <ul style="--accent:var(--warn)">
+        <li>Nettoyage et qualité des données</li>
+        <li>Tests statistiques et probabilités</li>
+        <li>Machine learning</li>
+        <li>Administration de bases de données</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout quiet"><p>Deux jours font découvrir et pratiquer. Le dire est la première honnêteté analytique.</p></div>
+</section>
+
+<!-- 4 -->
+<section class="slide divider">
+  <div class="kicker">Jour 1 · Module 1 — 90 minutes</div>
+  <h1>Les enjeux de la data en entreprise</h1>
+  <div class="meta">Donnée et cycle de vie · qualité · décision · métiers · secteurs · culture data</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="kicker">Module 1 · définition</div>
+  <h2>Qu'est-ce qu'une donnée ?</h2>
+  <p class="lead">La <strong>trace enregistrée</strong> d'un fait, dans un format qui permet de la conserver, la transmettre et la traiter automatiquement.</p>
+  <table style="margin-top:30px">
+    <tr><th>Niveau</th><th>Exemple</th></tr>
+    <tr><td>Donnée</td><td class="mono">montant_total_brl = 3602,47</td></tr>
+    <tr><td>Information</td><td>le montant moyen est de 162,52 BRL, la médiane de 107,95</td></tr>
+    <tr class="hl"><td>Connaissance</td><td>7 % des commandes font 32 % du chiffre d'affaires</td></tr>
+  </table>
+  <div class="callout"><p>La donnée n'est pas le fait. Entre les deux, il y a toujours une perte.</p></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="kicker">Module 1 · cycle de vie</div>
+  <h2>Six étapes — et deux qui comptent</h2>
+  <div class="three">
+    <div class="card"><h3>1. Collecte</h3><p>Une erreur ici ne se corrige jamais complètement en aval.</p></div>
+    <div class="card"><h3>2. Stockage</h3><p>Choisir le stockage, c'est choisir ce qu'on pourra faire ensuite.</p></div>
+    <div class="card"><h3>3. Préparation</h3><p>Nettoyage, jointures, valeurs manquantes. La majeure partie du temps réel.</p></div>
+  </div>
+  <div class="three" style="margin-top:22px">
+    <div class="card"><h3>4. Analyse</h3><p>L'étape visible, et la plus courte.</p></div>
+    <div class="card"><h3>5. Diffusion</h3><p>Non lue = aucune valeur créée.</p></div>
+    <div class="card"><h3>6. Archivage</h3><p>Question de coût, surtout de droit.</p></div>
+  </div>
+  <div class="callout quiet"><p>La valeur se perd à la collecte et à la diffusion. Pas à l'analyse, qui est pourtant celle qu'on imagine.</p></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="kicker">Module 1 · qualité</div>
+  <h2>Cinq critères qui se vérifient</h2>
+  <table>
+    <tr><th>Critère</th><th>Question de vérification</th><th>Exemple de défaut</th></tr>
+    <tr><td><strong>Exacte</strong></td><td>correspond-elle au fait réel ?</td><td>une adresse périmée</td></tr>
+    <tr><td><strong>Complète</strong></td><td>les champs attendus sont-ils remplis ?</td><td>pays manquant pour 12 % des clients</td></tr>
+    <tr><td><strong>Cohérente</strong></td><td>les sources concordent-elles ?</td><td>1 200 clients au CRM, 1 143 en facturation</td></tr>
+    <tr><td><strong>Fraîche</strong></td><td>assez récente <em>pour l'usage</em> ?</td><td>un stock actualisé chaque semaine</td></tr>
+    <tr><td><strong>Unique</strong></td><td>y a-t-il des doublons ?</td><td>le même client saisi deux fois</td></tr>
+  </table>
+  <div class="sub">La fraîcheur se juge par rapport à l'usage, jamais dans l'absolu. Une semaine est catastrophique pour une place de marché, suffisant pour un inventaire annuel.</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="kicker">Module 1 · décision</div>
+  <h2>Ce que la data apporte vraiment</h2>
+  <p class="lead" style="margin-bottom:28px">Elle ne supprime pas l'incertitude. Elle fait trois choses, plus modestes et plus puissantes.</p>
+  <ul>
+    <li>Elle rend l'incertitude <strong>visible et mesurable</strong> — sans données, on ignore qu'on ne sait pas</li>
+    <li>Elle rend la décision <strong>discutable</strong> — un chiffre peut être contredit, une intuition seulement acceptée ou refusée</li>
+    <li>Elle permet de <strong>mesurer l'effet</strong> de la décision — l'étape que tout le monde oublie</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="kicker">Module 1 · les trois pièges</div>
+  <h2>Les trois pièges de la décision par les données</h2>
+  <div class="three" style="margin-top:10px">
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">La corrélation</h3><p>Score de bonheur et PIB par habitant : <strong>0,79</strong> sur 156 pays. Cela pose une question, cela ne donne aucune réponse.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">La moyenne</h3><p>Moyenne <strong>162,52</strong> BRL, médiane <strong>107,95</strong>. Une décision calibrée sur 162 viserait un client qui n'existe presque pas.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">Le survivant</h3><p>Nos données contiennent les commandes passées. Pas les paniers abandonnés, ni les clients partis. <strong>Qui manque ?</strong></p></div>
+  </div>
+  <div class="sub">Ces trois pièges sont la matière de l'atelier 1, dans quelques minutes.</div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="kicker">Module 1 · métiers</div>
+  <h2>On lit un métier par son livrable</h2>
+  <table>
+    <tr><th>Métier</th><th>Livrable</th><th>Client interne</th></tr>
+    <tr><td><strong>Data Analyst</strong></td><td>un tableau de bord, une analyse qui répond à une question</td><td>direction, métier</td></tr>
+    <tr><td><strong>Data Engineer</strong></td><td>un pipeline qui livre des données fiables, à l'heure</td><td>les autres métiers data</td></tr>
+    <tr><td><strong>Data Scientist</strong></td><td>un modèle qui prédit, et sa mesure de performance</td><td>produit, métier</td></tr>
+    <tr><td>Analytics Engineer</td><td>des tables propres et documentées</td><td>analystes</td></tr>
+    <tr><td>Chief Data Officer</td><td>une stratégie et des arbitrages</td><td>comité de direction</td></tr>
+  </table>
+  <div class="callout quiet"><p>Lisez les missions et les outils d'une offre d'emploi. Jamais l'intitulé.</p></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="kicker">Module 1 · le métier réel</div>
+  <h2>Une journée de Data Analyst</h2>
+  <div class="figures" style="grid-template-columns:repeat(4,1fr);gap:22px">
+    <div class="fig"><div class="n">30 %</div><div class="l">comprendre la demande, reformuler, négocier le périmètre</div></div>
+    <div class="fig"><div class="n">35 %</div><div class="l">récupérer et préparer : requêtes, jointures, contrôles</div></div>
+    <div class="fig hot"><div class="n">15 %</div><div class="l">analyser : calculs, agrégations, comparaisons</div></div>
+    <div class="fig"><div class="n">20 %</div><div class="l">restituer : construire, écrire, défendre en réunion</div></div>
+  </div>
+  <div class="callout"><p>Une seule ligne sur quatre relève de l'analyse au sens strict.</p></div>
+  <div class="sub">C'est pourquoi ces deux jours consacrent une demi-journée au SQL et une séquence entière à la restitution orale.</div>
+</section>
+
+<!-- 12 -->
+<section class="slide tight">
+  <div class="kicker">Module 1 · secteurs</div>
+  <h2>Cinq secteurs, cinq difficultés propres</h2>
+  <table style="font-size:17px">
+    <tr><th>Secteur</th><th>Cas d'usage</th><th>La vraie difficulté</th></tr>
+    <tr><td><strong>Commerce en ligne</strong></td><td>tenue du délai, concentration du CA, avis clients</td><td>l'attribution : quelle étape mérite le budget ?</td></tr>
+    <tr><td><strong>Santé</strong></td><td>ruptures de parcours de soin</td><td>le droit arrive avant la technique</td></tr>
+    <tr><td><strong>Banque, assurance</strong></td><td>détection de fraude en temps réel</td><td>arbitrer entre deux erreurs de coûts opposés</td></tr>
+    <tr><td><strong>Industrie</strong></td><td>maintenance prédictive</td><td>il faut des pannes pour apprendre à les prévoir</td></tr>
+    <tr><td><strong>Public, transport</strong></td><td>prévision de charge du réseau</td><td>la décision doit s'expliquer à un citoyen</td></tr>
+  </table>
+  <div class="callout quiet"><p>Le test à appliquer à tout projet data : quelle décision sera prise différemment, par qui, à quelle fréquence ?</p></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="kicker">Module 1 · culture data</div>
+  <h2>Data-driven, ou data-décoré ?</h2>
+  <p class="lead">Une organisation est data-driven lorsque, face à un désaccord, elle règle la question en regardant les données <strong>plutôt qu'en comptant les galons</strong>.</p>
+  <div class="two" style="margin-top:30px">
+    <div>
+      <h3>Les quatre conditions</h3>
+      <ul style="margin-top:4px">
+        <li>Accès aux données</li>
+        <li>Compétence pour les lire</li>
+        <li>Définitions partagées</li>
+        <li>Droit de contredire</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--warn)">Trois symptômes de façade</h3>
+      <ul style="--accent:var(--warn);margin-top:4px">
+        <li>Le tableau de bord que personne n'ouvre</li>
+        <li>Le chiffre choisi après la conclusion</li>
+        <li>La métrique devenue objectif</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="kicker">Module 1 · à retenir</div>
+  <h2>Les quatre questions</h2>
+  <p class="lead" style="margin-bottom:24px">Aucune compétence technique requise. Elles suffisent à éliminer la majorité des mauvaises décisions prises au nom de la data.</p>
+  <div class="figures" style="grid-template-columns:repeat(2,1fr);gap:24px">
+    <div class="fig"><div class="n" style="font-size:32px">Définition ?</div><div class="l">« Quand vous dites client actif, vous comptez quoi exactement ? »</div></div>
+    <div class="fig"><div class="n" style="font-size:32px">Effectif ?</div><div class="l">« 40 % de hausse » sur 5 commandes, c'est 2 commandes de plus.</div></div>
+    <div class="fig"><div class="n" style="font-size:32px">Dispersion ?</div><div class="l">« C'est la moyenne. Quelle est la médiane ? Quel est l'étalement ? »</div></div>
+    <div class="fig"><div class="n" style="font-size:32px">Qui manque ?</div><div class="l">« Cette analyse porte sur les acheteurs. Et les autres ? »</div></div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 1 — 45 minutes</div>
+  <h1>Attaquer une décision chiffrée</h1>
+  <div class="meta">Quatre notes internes. Chacune s'appuie sur des chiffres réels. Chacune contient une faille.<br>Groupes de 3 ou 4 · sans ordinateur · restitution en 2 minutes</div>
+</section>
+
+<!-- 16 -->
+<section class="slide divider">
+  <div class="kicker">Jour 1 · Module 2 — 40 minutes</div>
+  <h1>Le modèle relationnel</h1>
+  <div class="meta">Tables · clés primaires et étrangères · jointures · ACID</div>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="kicker">Module 2 · le problème</div>
+  <h2>Pourquoi pas un seul grand tableau ?</h2>
+  <table style="font-size:15px">
+    <tr><th>commande</th><th>nom_client</th><th>ville</th><th>produit</th><th>prix</th><th>vendeur</th></tr>
+    <tr><td class="mono">40599d3d</td><td>A. Souza</td><td>Curitiba</td><td>croquettes</td><td class="num">11,90</td><td>Zoo+</td></tr>
+    <tr><td class="mono">40599d3d</td><td>A. Souza</td><td>Curitiba</td><td>gamelle</td><td class="num">8,50</td><td>Zoo+</td></tr>
+    <tr><td class="mono">743cc56c</td><td>B. Lima</td><td>Londrina</td><td>grille-pain</td><td class="num">97,99</td><td>ElectroBR</td></tr>
+  </table>
+  <div class="three" style="margin-top:30px">
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">Redondance</h3><p>La même information répétée des millions de fois.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">Incohérence</h3><p>Le client déménage : une ligne oubliée, deux vérités contradictoires.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">Impossibilité</h3><p>Comment enregistrer un vendeur qui n'a encore rien vendu ?</p></div>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <div class="kicker">Module 2 · notre base</div>
+  <h2 style="margin-bottom:18px">Huit tables, 3 000 commandes</h2>
+  <div class="schema" style="font-size:12.5px;line-height:1.42;padding:16px 20px">customers (3 000)              orders (3 000)
+  customer_id        PK &lt;--FK-- customer_id
+  customer_unique_id            order_id                  PK &lt;--+
+  customer_state                order_purchase_timestamp        |
+                                order_delivered_customer_date   |
+order_items (3 418)                                             |
+  order_id      PK, FK &lt;------------------------------------------+
+  order_item_id PK              products (2 488)                |
+  product_id    FK ----------&gt;    product_id            PK      |
+  seller_id     FK ---+           product_category_name FK      |
+  price               |                                         |
+  freight_value       |         order_payments (3 115)          |
+                      |           order_id FK  &lt;----------------+
+sellers (975)   &lt;-----+           payment_type                  |
+  seller_id  PK                                                 |
+  seller_state                  order_reviews (3 021)           |
+                                  order_id FK &lt;-----------------+
+                                  review_score</div>
+  <div class="callout"><p>3 418 articles, 3 021 avis, 3 115 paiements — pour 3 000 commandes. Retenez ces écarts : ils expliquent la moitié des erreurs de cet après-midi.</p></div>
+</section>
+
+<!-- 19 -->
+<section class="slide">
+  <div class="kicker">Module 2 · clés</div>
+  <h2>Trois idées, trois problèmes réglés</h2>
+  <table>
+    <tr><th>Idée</th><th>Définition</th><th>Problème réglé</th></tr>
+    <tr><td><strong>Une table par type de chose</strong></td><td>chaque information stockée à un seul endroit</td><td>la redondance</td></tr>
+    <tr><td><strong>Clé primaire</strong></td><td>identifie chaque ligne, unique et jamais vide</td><td>l'ambiguïté</td></tr>
+    <tr class="hl"><td><strong>Clé étrangère</strong></td><td>référence la clé primaire d'une autre table</td><td>l'incohérence — la base refuse une commande sans client</td></tr>
+  </table>
+  <div class="two" style="margin-top:26px">
+    <div><h3>Clé composée</h3><p style="font-size:17px;color:var(--muted)"><span class="mono">order_items</span> a pour clé <span class="mono">(order_id, order_item_id)</span>. Aucune des deux ne suffit seule.</p></div>
+    <div><h3>Intégrité référentielle</h3><p style="font-size:17px;color:var(--muted)">La garantie qu'une clé étrangère pointe toujours vers une ligne qui existe.</p></div>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="slide divider">
+  <div class="kicker">Jour 1 · Module 3 — 60 minutes</div>
+  <h1>SQL : lire et écrire</h1>
+  <div class="meta">SELECT · WHERE · GROUP BY · JOIN · HAVING<br>Première écriture de code de la formation</div>
+</section>
+
+<!-- 21 -->
+<section class="slide">
+  <div class="kicker">Module 3 · la forme</div>
+  <h2>Toujours le même squelette</h2>
+<pre><span class="kw">SELECT</span>   <span class="cm">-- quelles colonnes je veux voir</span>
+<span class="kw">FROM</span>     <span class="cm">-- dans quelle table</span>
+<span class="kw">WHERE</span>    <span class="cm">-- en ne gardant que certaines lignes</span>
+<span class="kw">GROUP BY</span> <span class="cm">-- en regroupant par une colonne</span>
+<span class="kw">HAVING</span>   <span class="cm">-- en ne gardant que certains groupes</span>
+<span class="kw">ORDER BY</span> <span class="cm">-- et en triant le résultat</span>
+<span class="kw">LIMIT</span>    <span class="cm">-- en n'affichant que les N premières lignes</span></pre>
+  <div class="two" style="margin-top:26px">
+    <div><h3>Deux habitudes à prendre</h3><ul style="margin-top:4px"><li>Toujours commencer par <span class="mono">LIMIT</span> quand on découvre une table</li><li>Jamais de <span class="mono">SELECT *</span> dans une requête finale</li></ul></div>
+    <div><h3 style="color:var(--warn)">Le piège du NULL</h3><p style="font-size:17px;color:var(--muted)"><span class="mono">NULL</span> n'est pas une valeur, c'est l'absence de valeur. <span class="mono">price = NULL</span> ne renvoie jamais rien. Il faut <span class="mono">IS NULL</span>.</p></div>
+  </div>
+</section>
+
+<!-- 22 -->
+<section class="slide">
+  <div class="kicker">Module 3 · agréger</div>
+  <h2>GROUP BY transforme n lignes en une ligne par groupe</h2>
+<pre><span class="kw">SELECT</span> customer_state, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> nb_clients
+<span class="kw">FROM</span>   customers
+<span class="kw">GROUP BY</span> customer_state
+<span class="kw">ORDER BY</span> nb_clients <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 5;</pre>
+  <table style="margin-top:20px">
+    <tr><th>customer_state</th><th>nb_clients</th></tr>
+    <tr class="hl"><td>SP</td><td class="num">1 228</td></tr>
+    <tr><td>RJ</td><td class="num">402</td></tr>
+    <tr><td>MG</td><td class="num">323</td></tr>
+    <tr><td>RS</td><td class="num">176</td></tr>
+    <tr><td>PR</td><td class="num">149</td></tr>
+  </table>
+  <div class="callout quiet"><p>3 000 lignes sont devenues 26 lignes. Règle : toute colonne du SELECT est soit dans le GROUP BY, soit dans une fonction d'agrégation.</p></div>
+</section>
+
+<!-- 23 -->
+<section class="slide">
+  <div class="kicker">Module 3 · joindre</div>
+  <h2>Suivre le chemin des clés</h2>
+<pre><span class="kw">SELECT</span> c.customer_state,
+       <span class="kw">COUNT</span>(<span class="kw">DISTINCT</span> o.order_id)               <span class="kw">AS</span> nb_commandes,
+       <span class="kw">ROUND</span>(<span class="kw">SUM</span>(i.price + i.freight_value), 2) <span class="kw">AS</span> chiffre_affaires
+<span class="kw">FROM</span>   orders <span class="kw">AS</span> o
+<span class="kw">JOIN</span>   customers   <span class="kw">AS</span> c <span class="kw">ON</span> o.customer_id = c.customer_id
+<span class="kw">JOIN</span>   order_items <span class="kw">AS</span> i <span class="kw">ON</span> o.order_id    = i.order_id
+<span class="kw">GROUP BY</span> c.customer_state;</pre>
+  <div class="callout"><p>COUNT(DISTINCT o.order_id) et non COUNT(*) : la jointure a multiplié les lignes. C'est l'erreur numéro un.</p></div>
+  <div class="sub"><strong>La méthode :</strong> quelle information finale · dans quelles tables · quel chemin de clés · écrire le FROM JOIN seul avec LIMIT · ajouter l'agrégation ensuite.</div>
+</section>
+
+<!-- 24 -->
+<section class="slide tight">
+  <div class="kicker">Module 3 · les trois erreurs</div>
+  <h2>Ce qui va vous arriver cet après-midi</h2>
+  <div class="three">
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">1. Multiplication des lignes</h3><p><span class="mono">orders</span> : 3 000.<br>Après jointure avec <span class="mono">order_items</span> : <strong>3 418</strong>.<br>Demandez-vous toujours : une ligne de mon résultat, c'est quoi ?</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">2. Identifiant non unique</h3><p><span class="mono">COUNT(customer_id)</span> = 3 000<br><span class="mono">COUNT(DISTINCT customer_unique_id)</span> = <strong>2 997</strong><br>20 commandes ont même reçu deux avis.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">3. Moyenne de moyennes</h3><p>La moyenne des 26 moyennes d'état ne donne pas la moyenne globale. Un état à 5 commandes pèserait autant que SP et ses 1 228.</p></div>
+  </div>
+  <div class="callout quiet"><p>Trois vérifications : l'ordre de grandeur · le total de contrôle (487 545,87 BRL) · le cas extrême.</p></div>
+</section>
+
+<!-- 25 -->
+<section class="slide">
+  <div class="kicker">Module 3 · à quoi ça sert</div>
+  <h2>Sept lignes de SQL, une question métier tranchée</h2>
+  <p style="font-size:22px;margin-bottom:18px">L'insatisfaction client vient-elle du produit ou de la logistique ?</p>
+  <table>
+    <tr><th>Livraison</th><th>Nombre d'avis</th><th>Note moyenne</th></tr>
+    <tr><td>à l'heure</td><td class="num">2 807</td><td class="num"><strong>4,26</strong></td></tr>
+    <tr class="hl"><td>en retard</td><td class="num">214</td><td class="num"><strong>2,25</strong></td></tr>
+  </table>
+  <div class="callout"><p>2,25 sur 5 contre 4,26. Dans cette entreprise, l'insatisfaction est d'abord logistique, pas produit.</p></div>
+  <div class="sub">Et un avertissement : le SQL annonce 12,54 jours de délai moyen, le tableur en annoncera 12,07. Les deux sont justes — fractions de journée contre jours entiers. <strong>Un écart entre deux chiffres est souvent une différence de définition, pas une erreur.</strong></div>
+</section>
+
+<!-- 26 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 2 — 60 minutes</div>
+  <h1>Écrire des requêtes SQL</h1>
+  <div class="meta">Douze requêtes sur la base Olist · sqliteonline.com<br>Contrôles : 3 000 commandes · 3 418 articles · 487 545,87 BRL</div>
+</section>
+
+<!-- 27 -->
+<section class="slide divider">
+  <div class="kicker">Jour 1 · Module 4 — 45 minutes</div>
+  <h1>Modélisation et diagrammes ERD</h1>
+  <div class="meta">Entités · cardinalités · normalisation · DBML</div>
+</section>
+
+<!-- 28 -->
+<section class="slide">
+  <div class="kicker">Module 4 · cardinalités</div>
+  <h2>La règle qui sert tout le temps</h2>
+  <table>
+    <tr><th>Notation</th><th>Exemple</th><th>Traduction en tables</th></tr>
+    <tr><td><strong>1 — 1</strong></td><td>un salarié, un badge</td><td>clé étrangère d'un côté, avec unicité</td></tr>
+    <tr class="hl"><td><strong>1 — N</strong></td><td>un client, plusieurs commandes</td><td>la clé étrangère va <strong>du côté N</strong></td></tr>
+    <tr><td><strong>N — N</strong></td><td>une commande, plusieurs produits<br>un produit, plusieurs commandes</td><td>il faut une <strong>table intermédiaire</strong></td></tr>
+  </table>
+  <div class="callout"><p>Peut-on mettre plusieurs valeurs dans une seule case ? Non. Donc de quel côté doit aller la clé ?</p></div>
+</section>
+
+<!-- 29 -->
+<section class="slide">
+  <div class="kicker">Module 4 · le point décisif</div>
+  <h2>Où vit le prix ?</h2>
+  <table>
+    <tr><th>Donnée</th><th>Emplacement</th><th>Nature</th></tr>
+    <tr><td>Le tarif au catalogue aujourd'hui</td><td class="mono">products</td><td><strong>état présent</strong>, qui change</td></tr>
+    <tr class="hl"><td>Le prix effectivement facturé</td><td class="mono">order_items</td><td><strong>événement passé</strong>, figé pour toujours</td></tr>
+  </table>
+  <div class="callout"><p>Si le prix n'existe que dans la fiche produit, le montant de toutes les commandes passées change rétroactivement le jour où le tarif bouge.</p></div>
+  <p style="margin-top:22px;font-size:20px">Une donnée qui décrit un <strong>état présent</strong> et une donnée qui décrit un <strong>événement passé</strong> sont deux données différentes — même si elles portent le même nom et la même valeur à un instant donné.</p>
+</section>
+
+<!-- 30 -->
+<section class="slide">
+  <div class="kicker">Module 4 · normaliser</div>
+  <h2>On normalise pour écrire,<br>on dénormalise pour lire</h2>
+  <table style="margin-top:20px">
+    <tr><th></th><th>Base normalisée (.db)</th><th>Fichier plat (.csv)</th></tr>
+    <tr><td>Structure</td><td>8 tables reliées</td><td>1 table plate</td></tr>
+    <tr><td>Obtenir un montant</td><td>une jointure et une somme</td><td>la colonne existe déjà</td></tr>
+    <tr><td>Renommer une catégorie</td><td>une seule ligne à modifier</td><td>toutes les lignes concernées</td></tr>
+    <tr class="hl"><td>Bon pour</td><td>enregistrer, garantir la cohérence</td><td>analyser, faire un tableau de bord</td></tr>
+  </table>
+  <div class="sub">Vous utiliserez les deux formes du <strong>même</strong> contenu : la base aujourd'hui, le fichier plat demain. Même chiffre d'affaires, même maximum, mêmes 218 grosses commandes.</div>
+</section>
+
+<!-- 31 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 3 — 30 minutes</div>
+  <h1>Modéliser un schéma</h1>
+  <div class="meta">Un cahier des charges de dix lignes · dbdiagram.io<br>Il contient une relation N—N et un piège sur le prix. Vous êtes prévenus.</div>
+</section>
+
+<!-- 32 -->
+<section class="slide divider">
+  <div class="kicker">Jour 2 · Module 5 — 60 minutes</div>
+  <h1>NoSQL, OLTP et OLAP</h1>
+  <div class="meta">Quatre familles · la grille de décision · architectures analytiques</div>
+</section>
+
+<!-- 33 -->
+<section class="slide">
+  <div class="kicker">Module 5 · NoSQL</div>
+  <h2>Quatre familles, quatre renoncements</h2>
+  <table>
+    <tr><th>Famille</th><th>On interroge</th><th>Renoncement</th><th>Cas d'usage</th></tr>
+    <tr><td><strong>Clé-valeur</strong></td><td>par la clé seulement</td><td>aucune recherche sur le contenu</td><td>sessions, cache</td></tr>
+    <tr><td><strong>Document</strong></td><td>l'intérieur du document</td><td>pas de jointure, schéma dans le code</td><td>catalogue hétérogène</td></tr>
+    <tr><td><strong>Colonnes larges</strong></td><td>par plage de clés</td><td>modèle de requête figé</td><td>capteurs, journaux</td></tr>
+    <tr><td><strong>Graphe</strong></td><td>des chemins</td><td>montée en charge délicate</td><td>réseaux, fraude</td></tr>
+  </table>
+  <div class="callout"><p>Cohérence à terme : après une écriture, une lecture peut renvoyer l'ancienne valeur. Acceptable pour un compteur de « j'aime ». Inacceptable pour un solde bancaire.</p></div>
+</section>
+
+<!-- 34 -->
+<section class="slide">
+  <div class="kicker">Module 5 · arbitrer</div>
+  <h2>Quatre questions, dans cet ordre</h2>
+  <ul style="margin-top:14px">
+    <li><strong>Les données sont-elles fortement reliées ?</strong> Si oui, le relationnel gagne — vous avez écrit les jointures hier.</li>
+    <li><strong>La structure est-elle stable ?</strong> Si elle change tous les mois, le document gagne.</li>
+    <li><strong>Une lecture périmée est-elle acceptable ?</strong> Argent, stock, dossier médical : non.</li>
+    <li><strong>Le volume dépasse-t-il une grosse machine ?</strong> Bien plus rare qu'on ne le croit. Nos 3 418 lignes tournent dans un navigateur.</li>
+  </ul>
+  <div class="callout quiet"><p>La question n'est jamais « SQL ou NoSQL ». Elle est « quel stockage pour quel usage ». En entreprise, la réponse est souvent « les deux » : persistance polyglotte.</p></div>
+</section>
+
+<!-- 35 -->
+<section class="slide">
+  <div class="kicker">Module 5 · OLTP / OLAP</div>
+  <h2>Deux mondes, deux métiers</h2>
+  <table>
+    <tr><th></th><th>OLTP</th><th>OLAP</th></tr>
+    <tr><td>Finalité</td><td>faire fonctionner l'activité</td><td>comprendre et décider</td></tr>
+    <tr><td>Opérations</td><td>écritures courtes, lectures unitaires</td><td>lectures massives, agrégations</td></tr>
+    <tr><td>Fraîcheur</td><td>temps réel</td><td>souvent la veille</td></tr>
+    <tr><td>Modélisation</td><td>normalisée</td><td>dénormalisée, en étoile</td></tr>
+    <tr class="hl"><td>Si le système tombe</td><td>l'entreprise s'arrête de vendre</td><td>on décide moins bien</td></tr>
+  </table>
+  <div class="callout"><p>On ne branche jamais un tableau de bord sur la base de production.</p></div>
+</section>
+
+<!-- 36 -->
+<section class="slide">
+  <div class="kicker">Module 5 · schéma en étoile</div>
+  <h2>D'où viennent « dimension » et « métrique »</h2>
+  <div class="schema" style="font-size:15px">        dim_temps                    dim_client
+        (année, mois, jour)          (état, ville)
+              \                          /
+               \                        /
+                +---  FAITS_COMMANDES  ---+
+                |     montant_total       |
+               /      nb_articles          \
+              /       delai_livraison       \
+        dim_produit                      dim_vendeur
+        (catégorie)                      (état, ville)</div>
+  <div class="two" style="margin-top:22px">
+    <div class="card"><h3>Mesures</h3><p><span class="mono">montant_total_brl</span> · <span class="mono">nb_articles</span> · <span class="mono">delai_livraison_j</span></p></div>
+    <div class="card"><h3>Dimensions</h3><p><span class="mono">date_achat</span> · <span class="mono">etat_client</span> · <span class="mono">categorie</span></p></div>
+  </div>
+  <div class="sub">Cet après-midi, Looker Studio vous demandera littéralement de désigner des dimensions et des métriques. Vous saurez pourquoi.</div>
+</section>
+
+<!-- 37 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 4 — 30 minutes</div>
+  <h1>Arbitrer entre SQL et NoSQL</h1>
+  <div class="meta">Cinq besoins concrets · deux arguments par décision · et ce que chaque choix coûte<br>Si vos cinq réponses sont identiques, vous avez appliqué une préférence, pas une grille.</div>
+</section>
+
+<!-- 38 -->
+<section class="slide divider">
+  <div class="kicker">Jour 2 · Module 6 — 95 minutes</div>
+  <h1>Statistiques descriptives</h1>
+  <div class="meta">Population et variables · fréquences · position · moyenne pondérée · dispersion</div>
+</section>
+
+<!-- 39 -->
+<section class="slide">
+  <div class="kicker">Module 6 · cadre</div>
+  <h2>Population, échantillon, variables</h2>
+  <div class="two">
+    <div>
+      <h3>La population est définie par la question</h3>
+      <p style="font-size:17px;color:var(--muted);margin-top:8px">Combien dépense une <strong>commande</strong> ? Un <strong>client</strong> ? Un <strong>état</strong> ? Trois populations, trois nombres différents.</p>
+      <h3 style="margin-top:22px">Notre échantillon</h3>
+      <p style="font-size:17px;color:var(--muted);margin-top:8px">3 000 commandes tirées au hasard parmi 96 478. Écarts à la population : 1 à 3 %.</p>
+    </div>
+    <div>
+      <h3>Ce que l'on a le droit de calculer</h3>
+      <table style="margin-top:10px;font-size:16px">
+        <tr><th>Calcul</th><th>Quanti.</th><th>Ordinale</th><th>Nominale</th></tr>
+        <tr><td>Effectif, mode</td><td>oui</td><td>oui</td><td>oui</td></tr>
+        <tr><td>Médiane, quartiles</td><td>oui</td><td>oui</td><td><strong style="color:var(--warn)">non</strong></td></tr>
+        <tr><td>Moyenne, écart-type</td><td>oui</td><td>discutable</td><td><strong style="color:var(--warn)">non</strong></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout"><p>Le danger ne vient presque jamais de la taille de l'échantillon. Il vient de la façon dont il a été constitué.</p></div>
+</section>
+
+<!-- 40 -->
+<section class="slide">
+  <div class="kicker">Module 6 · compter d'abord</div>
+  <h2>Un tableau de fréquences vaut une analyse</h2>
+  <table>
+    <tr><th>nb_articles</th><th>Effectif</th><th>Fréquence</th><th>Cumulée</th></tr>
+    <tr class="hl"><td>1</td><td class="num">2 700</td><td class="num">90,00 %</td><td class="num">90,00 %</td></tr>
+    <tr><td>2</td><td class="num">232</td><td class="num">7,73 %</td><td class="num">97,73 %</td></tr>
+    <tr><td>3</td><td class="num">41</td><td class="num">1,37 %</td><td class="num">99,10 %</td></tr>
+    <tr><td>4 à 8</td><td class="num">27</td><td class="num">0,90 %</td><td class="num">100,00 %</td></tr>
+  </table>
+  <div class="callout"><p>Neuf commandes sur dix ne contiennent qu'un seul article. Toute stratégie de vente croisée part de très loin — et ce constat s'obtient avant toute moyenne.</p></div>
+  <div class="sub">Un pourcentage sans son effectif ne veut rien dire : « 0,03 % des commandes ont 8 articles » sonne comme une statistique. C'est <strong>une</strong> commande.</div>
+</section>
+
+<!-- 41 -->
+<section class="slide">
+  <div class="kicker">Module 6 · position</div>
+  <h2>Moyenne, médiane, mode</h2>
+  <div class="figures">
+    <div class="fig"><div class="n">162,52</div><div class="l">Moyenne du montant, en BRL<br>somme / effectif</div></div>
+    <div class="fig"><div class="n">107,95</div><div class="l">Médiane<br>la moitié des commandes est en dessous</div></div>
+    <div class="fig"><div class="n">64</div><div class="l">Mode (arrondi)<br>observé 38 fois sur 3 000, soit 1,3 %</div></div>
+  </div>
+  <div class="callout"><p>La moyenne est supérieure de 50,6 % à la médiane. Laquelle décrit une commande typique ?</p></div>
+  <div class="sub">Le mode est presque inutile sur une variable continue. Il est le <strong>seul</strong> indicateur disponible sur une variable qualitative : mode de <span class="mono">etat_client</span> = SP, 1 228 commandes.</div>
+</section>
+
+<!-- 42 -->
+<section class="slide">
+  <div class="kicker">Module 6 · sensible contre robuste</div>
+  <h2>Une seule valeur sur douze</h2>
+  <p class="lead" style="margin-bottom:24px">Sur le mini-jeu de 12 montants, remplaçons la plus grande valeur (194,08) par une commande exceptionnelle de 20 000 BRL.</p>
+  <table>
+    <tr><th></th><th>Avant</th><th>Après</th></tr>
+    <tr><td><strong>Moyenne</strong></td><td class="num">83,15</td><td class="num" style="color:var(--warn)"><strong>1 733,64</strong></td></tr>
+    <tr class="hl"><td><strong>Médiane</strong></td><td class="num">58,86</td><td class="num"><strong>58,86</strong></td></tr>
+  </table>
+  <div class="callout"><p>La moyenne est multipliée par vingt. La médiane ne bouge pas d'un centime. Voilà la différence entre un indicateur sensible et un indicateur robuste.</p></div>
+</section>
+
+<!-- 43 -->
+<section class="slide">
+  <div class="kicker">Module 6 · le constat central</div>
+  <h2 style="margin-bottom:12px">Combien de commandes sont sous la moyenne ?</h2>
+  <div style="display:flex;align-items:center;justify-content:center;flex:1;flex-direction:column">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:150px;font-weight:600;color:var(--warn);line-height:1;letter-spacing:-.04em">69,5 %</div>
+    <p style="font-size:25px;margin-top:24px;text-align:center;max-width:46ch">2 086 commandes sur 3 000 sont inférieures à la « commande moyenne » de 162,52 BRL.</p>
+  </div>
+  <div class="callout"><p>Un plancher, pas de plafond : montants, salaires, temps d'attente, trafic web. La moyenne est toujours tirée au-dessus de la médiane.</p></div>
+</section>
+
+<!-- 44 -->
+<section class="slide">
+  <div class="kicker">Module 6 · moyenne pondérée</div>
+  <h2>Une moyenne ne se moyenne pas</h2>
+  <p class="lead" style="margin-bottom:22px">Calculons le montant moyen de chacun des 26 états, puis la moyenne de ces 26 moyennes.</p>
+  <table>
+    <tr><th>Méthode</th><th>Résultat</th></tr>
+    <tr><td>Moyenne <strong>simple</strong> des 26 moyennes d'état</td><td class="num" style="color:var(--warn)"><strong>181,90 BRL</strong></td></tr>
+    <tr class="hl"><td>Moyenne <strong>pondérée</strong> par les effectifs — la vraie moyenne</td><td class="num"><strong>162,52 BRL</strong></td></tr>
+  </table>
+  <div class="callout"><p>12 % d'écart. La moyenne simple donne le même poids à un état de 5 commandes qu'à São Paulo et ses 1 228.</p></div>
+  <div class="sub">Vous avez rencontré cette règle hier en SQL. La voici chiffrée sur vos propres données. Même faute, deux outils.</div>
+</section>
+
+<!-- 45 -->
+<section class="slide">
+  <div class="kicker">Module 6 · dispersion</div>
+  <h2>La position ne suffit jamais</h2>
+  <div class="two">
+    <div>
+      <p style="font-size:19px"><strong>Série A</strong> — 100, 105, 110, 115, 120</p>
+      <p style="font-size:19px;margin-top:8px"><strong>Série B</strong> — 10, 20, 110, 200, 210</p>
+      <p style="font-size:18px;margin-top:16px;color:var(--muted)">Même moyenne (110), même médiane. Deux réalités commerciales sans rien en commun.</p>
+    </div>
+    <div>
+      <h3>Variance puis écart-type</h3>
+      <p style="font-size:17px;color:var(--muted);margin-top:8px">La variance est la moyenne des carrés des écarts à la moyenne. Son unité est absurde — des BRL au carré : on prend la racine.</p>
+      <p style="font-size:18px;margin-top:12px"><span class="mono">variance = 46 504,82</span><br><span class="mono">écart-type = 215,65 BRL</span></p>
+    </div>
+  </div>
+  <div class="callout"><p>L'écart-type (215,65) dépasse la moyenne (162,52). Coefficient de variation : 132,7 %. La moyenne ne décrit rien.</p></div>
+</section>
+
+<!-- 46 -->
+<section class="slide">
+  <div class="kicker">Module 6 · comparer les dispersions</div>
+  <h2>Le coefficient de variation</h2>
+  <table>
+    <tr><th>Variable</th><th>Moyenne</th><th>Écart-type</th><th>CV</th></tr>
+    <tr class="hl"><td><span class="mono">montant_total_brl</span></td><td class="num">162,52 BRL</td><td class="num">215,65 BRL</td><td class="num"><strong>132,7 %</strong></td></tr>
+    <tr><td><span class="mono">delai_livraison_j</span></td><td class="num">12,07 j</td><td class="num">8,93 j</td><td class="num">74,0 %</td></tr>
+    <tr><td><span class="mono">nb_articles</span></td><td class="num">1,14</td><td class="num">0,51</td><td class="num">44,5 %</td></tr>
+  </table>
+  <div class="callout quiet"><p>Cette entreprise livre de façon relativement régulière, mais vend de façon très irrégulière. Deux problèmes de nature différente.</p></div>
+  <div class="sub">Repères : moins de 15 % série homogène · 15 à 30 % dispersion modérée · au-delà de 100 % la moyenne ne représente plus rien.</div>
+</section>
+
+<!-- 47 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 5 — 60 minutes</div>
+  <h1>Fiche d'identité et segments</h1>
+  <div class="meta">Deux variables à caractériser · trois comparaisons de segments · trois décisions à trancher<br>Toutes les cellules doivent être des formules.</div>
+</section>
+
+<!-- 48 -->
+<section class="slide divider">
+  <div class="kicker">Jour 2 · Module 7 — 50 minutes</div>
+  <h1>Distribution et valeurs aberrantes</h1>
+  <div class="meta">Quartiles et déciles · boîte à moustaches · règle de Tukey · décider</div>
+</section>
+
+<!-- 49 -->
+<section class="slide">
+  <div class="kicker">Module 7 · quartiles</div>
+  <h2>Le résumé à cinq nombres</h2>
+  <table>
+    <tr><th>Indicateur</th><th>Valeur (BRL)</th><th>Lecture</th></tr>
+    <tr><td>Minimum</td><td class="num">15,78</td><td>la plus petite commande</td></tr>
+    <tr><td><strong>Q1</strong></td><td class="num">62,82</td><td>un quart des commandes est en dessous</td></tr>
+    <tr class="hl"><td><strong>Q2 — médiane</strong></td><td class="num">107,95</td><td>la moitié est en dessous</td></tr>
+    <tr><td><strong>Q3</strong></td><td class="num">182,19</td><td>trois quarts sont en dessous</td></tr>
+    <tr><td>Maximum</td><td class="num">3 602,47</td><td>la plus grosse commande</td></tr>
+  </table>
+  <div class="callout"><p>La moitié centrale tient dans 119 BRL de large. Le quart supérieur s'étale sur 3 420 BRL — vingt-huit fois plus. L'asymétrie, par simple soustraction.</p></div>
+</section>
+
+<!-- 50 -->
+<section class="slide">
+  <div class="kicker">Module 7 · déciles</div>
+  <h2>La même réalité, dans la langue du décideur</h2>
+  <div class="hist">
+    <div class="hrow"><div class="lab">1er décile</div><div class="hbar" style="width:5.3%"></div><div class="val">1,98 % du CA</div></div>
+    <div class="hrow"><div class="lab">2e</div><div class="hbar" style="width:7.9%"></div><div class="val">2,95 %</div></div>
+    <div class="hrow"><div class="lab">3e</div><div class="hbar" style="width:10.3%"></div><div class="val">3,85 %</div></div>
+    <div class="hrow"><div class="lab">4e</div><div class="hbar" style="width:12.9%"></div><div class="val">4,83 %</div></div>
+    <div class="hrow"><div class="lab">5e</div><div class="hbar" style="width:16.2%"></div><div class="val">6,03 %</div></div>
+    <div class="hrow"><div class="lab">6e</div><div class="hbar" style="width:19.8%"></div><div class="val">7,39 %</div></div>
+    <div class="hrow"><div class="lab">7e</div><div class="hbar" style="width:24.4%"></div><div class="val">9,10 %</div></div>
+    <div class="hrow"><div class="lab">8e</div><div class="hbar" style="width:30.2%"></div><div class="val">11,26 %</div></div>
+    <div class="hrow"><div class="lab">9e</div><div class="hbar" style="width:41.0%"></div><div class="val">15,31 %</div></div>
+    <div class="hrow tail"><div class="lab">10e décile</div><div class="hbar" style="width:100%"></div><div class="val">37,30 %</div></div>
+  </div>
+  <div class="callout"><p>Les 10 % de commandes les plus grosses apportent plus du tiers du chiffre d'affaires — dix-neuf fois la contribution des 10 % les plus petites.</p></div>
+</section>
+
+<!-- 51 -->
+<section class="slide">
+  <div class="kicker">Module 7 · distribution</div>
+  <h2>Une queue longue</h2>
+  <div class="hist">
+    <div class="hrow"><div class="lab">0 – 50</div><div class="hbar" style="width:56.7%"></div><div class="val">500 · 16,7 %</div></div>
+    <div class="hrow"><div class="lab">50 – 100</div><div class="hbar" style="width:100%"></div><div class="val">882 · 29,4 %</div></div>
+    <div class="hrow"><div class="lab">100 – 150</div><div class="hbar" style="width:67.9%"></div><div class="val">599 · 20,0 %</div></div>
+    <div class="hrow"><div class="lab">150 – 200</div><div class="hbar" style="width:43.3%"></div><div class="val">382 · 12,7 %</div></div>
+    <div class="hrow"><div class="lab">200 – 300</div><div class="hbar" style="width:35.5%"></div><div class="val">313 · 10,4 %</div></div>
+    <div class="hrow tail"><div class="lab">300 – 500</div><div class="hbar" style="width:23.1%"></div><div class="val">204 · 6,8 %</div></div>
+    <div class="hrow tail"><div class="lab">500 – 1 000</div><div class="hbar" style="width:10.0%"></div><div class="val">88 · 2,9 %</div></div>
+    <div class="hrow tail"><div class="lab">1 000 +</div><div class="hbar" style="width:3.6%"></div><div class="val">32 · 1,1 %</div></div>
+  </div>
+  <div class="sub">Trois formes : <strong>symétrique en cloche</strong> (moyenne ≈ médiane) · <strong>asymétrique à droite</strong> (notre cas, le plus fréquent) · <strong>bimodale</strong> — deux pics signifient deux populations mélangées, arrêtez tout et séparez-les.</div>
+</section>
+
+<!-- 52 -->
+<section class="slide">
+  <div class="kicker">Module 7 · valeurs aberrantes</div>
+  <h2>La règle de Tukey</h2>
+  <p style="font-size:21px"><span class="mono">seuil bas = Q1 − 1,5 × IQR</span> &nbsp;·&nbsp; <span class="mono">seuil haut = Q3 + 1,5 × IQR</span></p>
+  <div class="figures" style="margin-top:28px">
+    <div class="fig"><div class="n">361,25</div><div class="l">Seuil haut, en BRL<br>182,19 + 1,5 × 119,37</div></div>
+    <div class="fig hot"><div class="n">7,27 %</div><div class="l">218 commandes au-delà du seuil</div></div>
+    <div class="fig hot"><div class="n">31,67 %</div><div class="l">du chiffre d'affaires portée par ces 218 commandes</div></div>
+  </div>
+  <div class="callout"><p>Les supprimer effacerait un tiers du chiffre d'affaires. Ce ne sont pas des erreurs : ce sont les meilleurs clients.</p></div>
+</section>
+
+<!-- 53 -->
+<section class="slide tight">
+  <div class="kicker">Module 7 · décider</div>
+  <h2>Une valeur aberrante n'est pas une erreur</h2>
+  <p class="lead" style="margin-bottom:22px">La règle signale des valeurs <strong>à examiner</strong>. Trois issues après examen.</p>
+  <div class="three">
+    <div class="card"><h3>1. C'est une erreur</h3><p>Montant négatif, date impossible, doublon. On corrige ou on exclut — <strong>en le documentant</strong>.</p></div>
+    <div class="card"><h3>2. Réel, hors sujet</h3><p>Pour calibrer un emballage standard, on écarte les gros volumes. On l'exclut <strong>en le disant</strong>.</p></div>
+    <div class="card" style="border-left-color:var(--warn)"><h3 style="color:var(--warn)">3. Réel et central</h3><p>Notre cas. On n'exclut pas : on en fait un <strong>segment à part entière</strong>.</p></div>
+  </div>
+  <div class="callout"><p>Et ce qu'aucun seuil ne verra jamais : un montant à 0, une livraison antérieure à l'achat, un état inexistant. Une valeur peut être <strong>anormale sans être extrême</strong>.</p></div>
+</section>
+
+<!-- 54 -->
+<section class="slide">
+  <div class="kicker">Module 7 · la fiche d'identité</div>
+  <h2>Sept lignes, dix minutes</h2>
+  <table style="font-size:17px">
+    <tr><th>#</th><th>Indicateur</th><th>montant_total_brl</th></tr>
+    <tr><td>1</td><td>Effectif et valeurs manquantes</td><td class="num">3 000 · 0</td></tr>
+    <tr><td>2</td><td>Minimum et maximum</td><td class="num">15,78 · 3 602,47</td></tr>
+    <tr><td>3</td><td>Moyenne</td><td class="num">162,52</td></tr>
+    <tr><td>4</td><td>Médiane</td><td class="num">107,95</td></tr>
+    <tr><td>5</td><td>Écart-type et CV</td><td class="num">215,65 · 132,7 %</td></tr>
+    <tr><td>6</td><td>Q1, Q3, IQR</td><td class="num">62,82 · 182,19 · 119,37</td></tr>
+    <tr class="hl"><td>7</td><td>Valeurs hors seuils de Tukey</td><td class="num">218 · 7,27 %</td></tr>
+  </table>
+  <div class="sub">Ne présentez jamais une moyenne seule. Une colonne de plus, et vous évitez des décisions fausses.</div>
+</section>
+
+<!-- 55 -->
+<section class="slide divider">
+  <div class="kicker">Atelier 6 — 50 minutes + 25 minutes</div>
+  <h1>Tableau de bord et restitution</h1>
+  <div class="meta">Looker Studio · 156 pays · une seule page<br>Puis cinq minutes pour le défendre à l'oral. Vous serez interrompus à cinq minutes.</div>
+</section>
+
+<!-- 56 -->
+<section class="slide tight">
+  <div class="kicker">Atelier 6 · exigences</div>
+  <h2>Ce que votre tableau de bord doit contenir</h2>
+  <ul style="margin-top:10px">
+    <li><strong>Un titre avec la source, l'année et l'effectif</strong> — obligation professionnelle, pas décoration</li>
+    <li><strong>Deux chiffres clés, dont une médiane</strong> — elle n'est pas dans la liste des agrégations, cherchez du côté des champs calculés</li>
+    <li><strong>Une comparaison régionale montrant les effectifs</strong> — une région de 2 pays et une de 40 ne se comparent pas à l'oeil</li>
+    <li><strong>Un classement aux deux extrémités</strong> — ne montrer que les meilleurs, c'est de la communication</li>
+    <li><strong>Un nuage de points PIB / score, avec une zone de texte</strong> — ce qu'il suggère, et ce qu'il ne permet pas de conclure</li>
+    <li><strong>Un filtre régional</strong> — qui agit sur tous les graphiques</li>
+  </ul>
+  <div class="callout"><p>Un nuage de points sans avertissement sur la causalité, c'est la faute que vous avez critiquée hier matin.</p></div>
+</section>
+
+<!-- 57 -->
+<section class="slide">
+  <div class="kicker">Atelier 6 · restitution</div>
+  <h2>Cinq minutes pour convaincre</h2>
+  <table>
+    <tr><th>Temps</th><th>Contenu</th></tr>
+    <tr><td class="mono">45 s</td><td>La question et la décision qu'elle éclaire</td></tr>
+    <tr class="hl"><td class="mono">2 min</td><td><strong>Trois constats chiffrés, pas plus</strong></td></tr>
+    <tr><td class="mono">1 min</td><td>Les limites : ce que ce tableau de bord ne dit pas</td></tr>
+    <tr><td class="mono">1 min</td><td>Votre recommandation, et la donnée que vous réclameriez ensuite</td></tr>
+    <tr><td class="mono">15 s</td><td>Conclusion en une phrase</td></tr>
+  </table>
+  <div class="callout"><p>Un quatrième constat vous fait perdre des points, pas en gagner. Un auditeur retient trois choses au maximum.</p></div>
+  <div class="sub">Les trois défauts sanctionnés : la visite guidée de votre écran · l'accumulation · la certitude sans limite énoncée.</div>
+</section>
+
+<!-- 58 -->
+<section class="slide tight">
+  <div class="kicker">Clôture</div>
+  <h2>Ce qui doit rester dans un an</h2>
+  <ul style="margin-top:8px">
+    <li>Une donnée est la <strong>trace</strong> d'un fait — l'écart entre les deux est votre premier sujet de vigilance</li>
+    <li>Un projet data commence par une <strong>décision à prendre</strong>, jamais par une donnée disponible</li>
+    <li>La clé étrangère va <strong>du côté « plusieurs »</strong> ; un N—N exige une table intermédiaire</li>
+    <li>On <strong>normalise pour écrire</strong>, on <strong>dénormalise pour lire</strong></li>
+    <li>En SQL : une jointure multiplie les lignes, et <strong>une moyenne ne se moyenne pas</strong></li>
+    <li>Comparez toujours <strong>moyenne et médiane</strong> — 162,52 contre 107,95, et 69,5 % sous la moyenne</li>
+    <li>Une valeur aberrante est une valeur <strong>à examiner</strong>, pas une erreur à supprimer</li>
+  </ul>
+  <div class="callout quiet"><p>Définition ? Effectif ? Dispersion ? Qui manque ? — quatre questions, aucune compétence technique requise.</p></div>
+</section>
+
+<!-- 59 -->
+<section class="slide">
+  <div class="kicker">Clôture</div>
+  <h2>Les trois bouclages de ces deux jours</h2>
+  <div class="three" style="margin-top:14px">
+    <div class="card"><h3>La corrélation</h3><p>Hier matin, vous avez critiqué une corrélation de 0,79 <strong>sans avoir vu une seule donnée</strong>. Cet après-midi vous l'avez affichée vous-mêmes — et la plupart ont spontanément écrit la limite à côté.</p></div>
+    <div class="card"><h3>Le chiffre d'affaires</h3><p><strong>487 545,87 BRL</strong> obtenu hier en SQL, retrouvé aujourd'hui au tableur. Deux outils, une même donnée, un même résultat.</p></div>
+    <div class="card"><h3>Les 12,54 et 12,07 jours</h3><p>Quand deux chiffres diffèrent, c'est presque toujours une <strong>différence de définition</strong>, pas une erreur de calcul.</p></div>
+  </div>
+  <div class="callout"><p>Vous n'aurez pas toujours un tableur sous la main. Les quatre questions, vous les aurez toujours.</p></div>
+</section>
+
+<!-- 60 -->
+<section class="slide title-slide">
+  <div class="kicker">Sources</div>
+  <h1 style="font-size:42px">Les données des deux journées</h1>
+  <div class="meta" style="margin-top:28px">
+    <span>Brazilian E-Commerce Public Dataset by Olist</span><br>
+    99 441 commandes, septembre 2016 – octobre 2018<br>
+    extrait de 3 000 commandes livrées 2017-2018, en base SQL et en fichier plat<br>
+    kaggle.com/datasets/olistbr/brazilian-ecommerce<br><br>
+    <span>World Happiness Report 2019</span><br>
+    156 pays, 10 régions<br>
+    kaggle.com/datasets/unsdsn/world-happiness<br><br>
+    <span>Outils</span> — sqliteonline.com · dbdiagram.io · lookerstudio.google.com
+  </div>
+</section>
+
+
+<div id="dots"></div>
+<div id="counter"></div>
+<div id="nav"><button id="prev" aria-label="Précédent">&#8249;</button><button id="next" aria-label="Suivant">&#8250;</button></div>
+</div></div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dots=document.getElementById('dots');
+  var counter=document.getElementById('counter');
+  var i=0;
+
+  function fit(){
+    var s=Math.min(window.innerWidth/1280, window.innerHeight/720);
+    stage.style.transform='scale('+s+')';
+  }
+  window.addEventListener('resize',fit); fit();
+
+  slides.forEach(function(_,k){
+    var d=document.createElement('div');
+    d.className='dot'+(k===0?' on':'');
+    d.addEventListener('click',function(){go(k);});
+    dots.appendChild(d);
+  });
+
+  function go(n){
+    if(n<0||n>=slides.length) return;
+    slides[i].classList.remove('active');
+    dots.children[i].classList.remove('on');
+    i=n;
+    slides[i].classList.add('active');
+    dots.children[i].classList.add('on');
+    counter.textContent=(i+1)+' / '+slides.length;
+  }
+  counter.textContent='1 / '+slides.length;
+
+  document.getElementById('prev').addEventListener('click',function(){go(i-1);});
+  document.getElementById('next').addEventListener('click',function(){go(i+1);});
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') {e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp') {e.preventDefault();go(i-1);}
+    else if(e.key==='Home') go(0);
+    else if(e.key==='End') go(slides.length-1);
+    else if(e.key==='Escape') { try{window.parent.postMessage({type:'close-fullscreen'},'*');}catch(err){} }
+  });
+
+  window.addEventListener('message',function(e){
+    var d=e.data||{};
+    if(d.type==='navigate'){ if(d.direction==='next') go(i+1); else if(d.direction==='prev') go(i-1); }
+  });
+
+  var x0=null;
+  stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  stage.addEventListener('touchend',function(e){
+    if(x0===null) return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(dx<0?i+1:i-1);
+    x0=null;
+  },{passive:true});
+})();
+</script>
+</body>
+</html>
