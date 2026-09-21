@@ -89,7 +89,7 @@ Cette garantie n'est pas un détail technique. C'est ce qui fait qu'une base rel
 
 Voici la base que vous allez interroger cet après-midi. Huit tables, restreintes aux 3 000 commandes de notre échantillon.
 
-```
+```mermaid
 erDiagram
     CUSTOMERS ||--o{ ORDERS : "place (1:N)"
     ORDERS ||--o{ ORDER_ITEMS : "contains (1:N)"
