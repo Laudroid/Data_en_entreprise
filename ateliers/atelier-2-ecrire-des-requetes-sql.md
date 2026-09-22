@@ -25,9 +25,6 @@ En cas d'échec de l'import du `.db`, utilisez le fichier de secours `olist-peda
 
 ## Le schéma
 
-```
-Bien sûr — voici le modèle converti en **diagramme Mermaid ER (`erDiagram`)**, avec les **8 tables** et leurs clés primaires/étrangères.
-
 ```mermaid
 erDiagram
     customers {
