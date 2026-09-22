@@ -21,19 +21,6 @@
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 18 min | 1. Population, échantillon et variables |
-| 10 min | 2. Effectifs et fréquences |
-| 22 min | 3. Moyenne, médiane, mode |
-| 12 min | 4. La moyenne pondérée, et le piège de la moyenne de moyennes |
-| 25 min | 5. La dispersion : étendue, variance, écart-type |
-| 8 min | 6. Le coefficient de variation et la règle des écarts-types |
-
----
-
 ## 1. Population, échantillon et variables
 
 ### 1.1 Population
@@ -207,7 +194,7 @@ Reprenons le mini-jeu de 12 valeurs et remplaçons la plus grande, 194,08, par u
 | Moyenne | 83,15 | **1 733,64** |
 | Médiane | 58,86 | **58,86** |
 
-La moyenne est multipliée par vingt. La médiane ne bouge pas d'un centime.
+La moyenne est multipliée par vingt. La médiane ne bouge pas.
 
 C'est toute la différence entre un indicateur **sensible** et un indicateur **robuste**. Une seule valeur, sur douze, a suffi à rendre la moyenne absurde.
 
@@ -473,27 +460,3 @@ C'est exactement ce que le module 7 va apporter, juste après l'atelier.
 **Écart-type** : racine carrée de la variance, dans l'unité des données.
 **Coefficient de variation** : écart-type rapporté à la moyenne, en pourcentage.
 **Règle 68-95-99,7** : répartition des valeurs autour de la moyenne pour une distribution en cloche.
-
----
-
-## Notes pour le formateur
-
-**95 minutes, c'est long : découpez en trois temps.** Sections 1 et 2 (28 min), puis sections 3 et 4 (34 min), puis section 5 et 6 (33 min). Marquez les transitions explicitement, et faites calculer quelque chose à chaque temps. Une séquence de 95 minutes purement magistrale ne tiendra pas.
-
-**La séquence à ne rater sous aucun prétexte, c'est la section 3.4.** Le chiffre « 69,5 % des transactions sont sous la moyenne » est le moment où la salle comprend quelque chose de neuf. **Faites-le deviner avant de le révéler** : demandez à main levée quelle proportion de commandes se situe, selon eux, sous la moyenne. La réponse spontanée est « la moitié ». L'écart entre 50 % et 69,5 % est votre meilleur outil pédagogique des deux journées.
-
-**Faites la démonstration 3.3 en direct, au tableau.** Sur le mini-jeu projeté, remplacez 194,08 par 20 000 et faites recalculer. Trente secondes, et le point est acquis définitivement.
-
-**Faites calculer la médiane à la main.** Cinq minutes, papier et stylo, avant tout tableur. Sans cela, la médiane reste « la fonction MEDIANE » et non une notion.
-
-**Faites faire le calcul d'écart-type de la section 5.5 à la main aussi.** Cinq valeurs, cinq lignes, et la formule cesse d'être une incantation. Le moment où ils constatent que la somme des écarts vaut exactement 0 est un bon moment.
-
-**Ne démontrez pas le n − 1.** Annoncez la correction, montrez les 0,02 % sur 3 000 valeurs et les 12 % sur 5 valeurs, tranchez la convention, passez. Toute tentative de démonstration coûtera dix minutes et perdra la salle.
-
-**Sur les formules mathématiques.** Elles sont écrites pour ceux qui veulent les voir, mais ne les commentez pas symbole par symbole. Énoncez chaque formule en français — « la variance, c'est la moyenne des carrés des écarts à la moyenne » — et passez au calcul. Une notation sigma non expliquée fait décrocher plus sûrement qu'un calcul difficile.
-
-**La section 4 est un cadeau : elle boucle avec le SQL d'hier.** Ils ont entendu « une moyenne ne se moyenne pas » comme une règle abstraite ; ici ils voient 181,90 contre 162,52 sur leurs propres données. Prenez le temps de faire le lien explicitement.
-
-**Si vous êtes en retard**, coupez la section 6.2 (règle 68-95-99,7) et la section 5.5 (calcul à la main de l'écart-type). Ne coupez jamais 3.3, 3.4 et 4.2.
-
-**Transition vers l'atelier 5.** « Vous avez tous les chiffres sous les yeux dans ce support. Ils ne valent rien tant que vous ne les avez pas retrouvés vous-mêmes — et l'atelier porte sur d'autres variables que celles que je viens de traiter. »

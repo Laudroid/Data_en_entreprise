@@ -18,17 +18,6 @@
 
 ---
 
-## Minutage interne
-
-| Temps | Séquence |
-|---|---|
-| 12 min | 1. D'où vient NoSQL |
-| 14 min | 2. Les quatre familles |
-| 10 min | 3. Choisir : la grille en quatre questions |
-| 12 min | 4. OLTP et OLAP |
-| 12 min | 5. La chaîne analytique et le schéma en étoile |
-
----
 
 ## 1. D'où vient NoSQL
 
@@ -289,13 +278,13 @@ Dans un entrepôt, on n'utilise pas le schéma normalisé de l'OLTP. On adopte u
 
 On analyse ensuite **une mesure « par » une dimension** : le montant total par mois, par état, par catégorie.
 
-### 5.4 Pourquoi cela vous concerne dans une heure
+### 5.4 Pourquoi cela vous concerne ?
 
 Regardez le fichier `transactions-ecommerce.csv` que vous utiliserez aujourd'hui :
 
 | Colonne | Rôle |
 |---|---|
-| `montant_total_brl`, `nb_articles`, `delai_livraison_j` | **mesures** |
+| `montant_total_brl`, `nb_articles`, `delai_livraison_j` | **metriques** |
 | `date_achat`, `etat_client`, `categorie` | **dimensions** |
 | `id_commande` | identifiant du fait |
 
@@ -331,19 +320,3 @@ Vous saurez pourquoi ces deux mots, d'où ils viennent, et ce qu'ils recouvrent.
 **Lakehouse** : architecture combinant souplesse du lac et garanties de l'entrepôt.
 **Schéma en étoile** : table de faits centrale entourée de tables de dimensions.
 **Fait, mesure, dimension** : l'événement enregistré, ce qu'on calcule, l'axe selon lequel on analyse.
-
----
-
-## Notes pour le formateur
-
-**Ce module ouvre la seconde journée : soignez la reconnexion.** Les étudiants reviennent avec une nuit de décalage. Les dix minutes de reprise qui précèdent ce module servent à cela ; enchaînez en rappelant qu'ils ont passé l'après-midi d'hier dans un système relationnel, et que la question du jour est « et quand ce n'est pas le bon outil ? ».
-
-**Point de vigilance sur NoSQL.** Le public arrive souvent avec l'idée que NoSQL est l'avenir et SQL le passé. Le contre-argument le plus efficace est l'ancienneté de SQL retournée en atout : un langage normalisé en 1986, encore massivement utilisé en 2026, n'est pas un vestige — c'est une norme qui a survécu à tous ses concurrents. Et ils viennent d'écrire leurs premières requêtes, l'argument porte bien mieux la veille au soir passée.
-
-**Faites voter la salle sur les cas d'usage** avant de donner la réponse, famille par famille. Les désaccords sont productifs, en particulier sur le document contre le relationnel.
-
-**La section 5.4 est la charnière de la journée.** Elle prépare directement l'atelier tableau de bord de l'après-midi et évite vingt minutes de flottement devant l'interface de Looker Studio. Ne la coupez sous aucun prétexte : c'est le moment où « dimension » et « métrique » cessent d'être du jargon d'outil.
-
-**Si vous êtes en retard**, comprimez la section 5.2 (entrepôt, lac, lakehouse) à trois phrases et gardez 5.3 et 5.4 en entier.
-
-**Transition vers l'atelier 4.** « Trente minutes, trois besoins concrets, trois décisions à trancher avec deux arguments chacune. Et un avertissement : si vos trois réponses sont identiques, vous avez appliqué une préférence, pas une grille. »
