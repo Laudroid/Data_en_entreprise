@@ -94,11 +94,6 @@ erDiagram
     orders ||--o{ order_reviews : "receives"
 ```
 
- **Remarque :** j’ai ajouté `seller_id FK` dans `order_items`, car la relation avec la table `sellers` apparaît implicitement dans ton modèle et elle est nécessaire pour relier les 8 tables.
-```
-
-**Effectifs à garder en tête :** 3 000 commandes, 3 418 lignes d'articles, 3 021 avis, 3 115 paiements, 975 vendeurs, 2 488 produits.
-
 ---
 
 ## Consignes générales
