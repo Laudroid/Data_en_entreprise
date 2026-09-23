@@ -335,18 +335,4 @@ Même jeu de données, mêmes dix minutes de calcul, et une conclusion qui n'a r
 **Valeur aberrante (outlier)** : valeur éloignée du reste, à examiner et non à supprimer par principe.
 **Indicateur robuste** : indicateur insensible aux valeurs extrêmes (médiane, IQR).
 
----
 
-## Notes pour le formateur
-
-**Ce module est court (50 minutes) et dense.** Il arrive après un atelier d'une heure, en début d'après-midi : c'est le pire créneau de la journée en matière d'attention. Ouvrez avec le tableau des déciles de la section 1.3 — « 10 % des commandes font 37 % du chiffre d'affaires » réveille une salle bien plus sûrement qu'une définition.
-
-**Les deux séquences à ne jamais couper sont 4.2 et 4.3.** Que faire des valeurs aberrantes est, avec l'opposition moyenne/médiane, l'un des deux seuls contenus dont on se souviendra dans un an.
-
-**La section 4.4 est le point le plus fin du module.** Faites-la deviner : « la règle de Tukey signale les valeurs extrêmes. Quelles anomalies va-t-elle rater ? » Laissez chercher trente secondes. Une salle qui trouve « une date de livraison avant la date d'achat » a compris quelque chose que beaucoup de professionnels n'ont pas compris.
-
-**La boîte à moustaches (2.2) mérite d'être dessinée au tableau**, pas seulement projetée. Tracez-la en commentant chaque élément, puis effacez et faites-en dessiner une par la salle sur le résumé à cinq nombres des frais de port qu'ils ont calculé à l'atelier précédent. Trois minutes, et le graphique est acquis.
-
-**Si vous êtes en retard**, coupez la section 1.3 (déciles) — mais gardez la ligne « 10 % des commandes font 37 % du CA », qui suffit — et comprimez 3.2 à une phrase.
-
-**Transition vers l'atelier 6.** « Vous avez passé la journée à calculer. Il reste la partie que personne ne travaille jamais et que tout le monde vous demandera : faire comprendre le résultat à quelqu'un qui n'a pas fait les calculs. Une page, cinq minutes de présentation. »
